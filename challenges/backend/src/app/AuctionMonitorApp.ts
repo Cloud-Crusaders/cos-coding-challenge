@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { ILogger } from "./services/Logger/interface/ILogger";
+import { ICarOnSaleClient } from "./services/CarOnSaleClient/interface/ICarOnSaleClient";
 import { DependencyIdentifier } from "./DependencyIdentifiers";
 import "reflect-metadata";
 
@@ -7,13 +8,15 @@ import "reflect-metadata";
 export class AuctionMonitorApp {
 
     public constructor(
-        @inject(DependencyIdentifier.LOGGER) private logger: ILogger) {
+        @inject(DependencyIdentifier.LOGGER) private logger: ILogger,
+        @inject(DependencyIdentifier.CARONSALECLIENT) private carOnSaleClient: ICarOnSaleClient) {
     }
 
     public async start(): Promise<void> {
-        this.logger.log(`Auction Monitor started.`);
+        this.logger.log(`Auction Monitor started, retrieving Auctions.`);
 
         // TODO: Retrieve auctions and display aggregated information (see README.md)
+        const result = await this.carOnSaleClient.getRunningAuctions();
     }
 
 }
